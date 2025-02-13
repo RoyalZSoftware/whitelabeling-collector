@@ -5,7 +5,8 @@ def setup_test
   if File.file? 'Test.sqlite3'
     File.delete 'Test.sqlite3'
   end
-  WhitelabelingCollector::Lib.init(adapter: 'sqlite3', database: 'Test.sqlite3')
+
+  ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: 'Test.sqlite3')
   require_relative '../lib/migrations/001_init.rb'
 end
 

@@ -3,7 +3,8 @@ require 'active_record'
 require 'json'
 require 'sinatra'
 
-WhitelabelingCollector::Lib.init(adapter: 'sqlite3', database: 'Test.sqlite3')
+ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: 'Test.sqlite3')
+
 before '/*' do
   content_type :json
 end
