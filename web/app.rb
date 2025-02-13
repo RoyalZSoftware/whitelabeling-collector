@@ -32,10 +32,10 @@ def json_body
 end
 
 # Create a new organization. Should be limited to X
-post '/organizations'
+post '/organizations' do
 end
 
-post '/upload'
+post '/upload' do
 # maybe wrong to have a generic upload route.
 end
 
