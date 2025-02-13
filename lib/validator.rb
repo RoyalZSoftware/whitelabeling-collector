@@ -6,6 +6,7 @@ module WhitelabelingCollector::Lib
   end
 
   class ImageSizeValidator < Validator
+    attr_accessor :image_width, :image_height
     def validate(image)
       # check image dimensions
     end
@@ -15,7 +16,7 @@ module WhitelabelingCollector::Lib
     def validate(json)
     end
   end
-  
+
   class RegexValidator < Validator
     attr_accessor :regex
     def validate(content)

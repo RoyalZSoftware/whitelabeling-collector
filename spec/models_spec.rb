@@ -1,29 +1,12 @@
 require_relative '../lib/whitelabeling_collector'
-require 'active_record'
 require 'json'
 
 def setup_test
-  ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: 'Test.sqlite3')
-  ActiveRecord::Migration.class_eval do 
-    create_table :users do |t|
-      t.string :name 
-    end
-    create_table :organizations do |t|
-      t.string :name
-    end
-    create_table :provider_invitations do
-    end
-    create_table :fields
-    create_table :validators
-    create_table :data_buckets do |t|
-      t.string :organization_id
-    end
-    create_table :submissions do |t|
-      t.string :organization_id
-      t.string :data_bucket_id
-      t.string :user_id
-    end
+  if File.file? 'Test.sqlite3'
+    File.delete 'Test.sqlite3'
   end
+  WhitelabelingCollector::Lib.init(adapter: 'sqlite3', database: 'Test.sqlite3')
+  require_relative '../lib/migrations/001_init.rb'
 end
 
 setup_test
@@ -38,7 +21,9 @@ invitation.accept
 invitee = WhitelabelingCollector::Lib::User.create(name: "Invitee")
 
 data_bucket = WhitelabelingCollector::Lib::DataBucket.create(organization_id: organization.id, created_by: creator, name: "IOS Onboarding", fields: [
-  WhitelabelingCollector::Lib::Field.create(identifier: 'app_icon', name: "App icon", hint: "The icon that will be displayed in the app screen", description: "Xyz"),
+  WhitelabelingCollector::Lib::Field.create(identifier: 'app_icon', name: "App icon", hint: "The icon that will be displayed in the app screen", description: "Xyz", validators: [
+    WhitelabelingCollector::Lib::ImageSizeValidator.create(image_width: 512, image_height: 512)
+  ]),
   WhitelabelingCollector::Lib::Field.create(identifier: 'name', name: "Name", hint: "The name of the app in the appstore", description: "xyz", validators: [
     WhitelabelingCollector::Lib::RegexValidator.create(regex: /[a-zA-Z]/)
   ]),
