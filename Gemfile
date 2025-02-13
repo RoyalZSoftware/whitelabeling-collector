@@ -2,8 +2,6 @@
 
 source "https://rubygems.org"
 
-# gem "rails"
-
 gem "activerecord", "~> 8.0"
 
 gem "sqlite3", "~> 2.5"
