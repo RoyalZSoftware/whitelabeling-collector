@@ -8,9 +8,6 @@ before '/*' do
   content_type :json
 end
 
-post '/organizations' do
-end
-
 def validate_user_is_organization_admin
   if params[:organization_id] == "69"
     halt 401
@@ -34,10 +31,37 @@ def json_body
   JSON.parse request.body.read
 end
 
+# Create a new organization. Should be limited to X
+post '/organizations'
+end
+
+post '/upload'
+# maybe wrong to have a generic upload route.
+end
+
+post '/organizations/:organization_id/invite' do
+end
+
 post '/organizations/:organization_id/data_buckets' do
   validate_user_is_organization_admin
 
   WhitelabelingCollector::Lib::DataBucket.create(organization_id: params[:organization_id], name: json_body['name']).to_json
+end
+
+put '/organizations/:organization_id/data_buckets' do
+  # Changes the field definitions
+  validate_user_is_organization_admin
+
+  WhitelabelingCollector::Lib::DataBucket.create(organization_id: params[:organization_id], name: json_body['name']).to_json
+end
+
+get '/organizations/:organization_id/data_buckets/fields' do
+end
+
+post '/organizations/:organization_id/data_buckets/fields' do
+end
+
+put '/organizations/:organization_id/data_buckets/fields/:field_id' do
 end
 
 get '/organizations/:organization_id/data_buckets/:data_bucket_id/submissions' do
@@ -50,11 +74,24 @@ post '/organizations/:organization_id/data_buckets/:data_bucket_id/submissions' 
 end
 
 get '/organizations/:organization_id/data_buckets/:data_bucket_id/submissions/:submission_id' do
+  # todo: check if user is
+  #   either organization id
+  #   or submitter
+
+  WhitelabelingCollector::Lib.Submission.find(params[:submission_id])
 end
 
 put '/organizations/:organization_id/data_buckets/:data_bucket_id/submissions/:submission_id' do
+  # todo: check if user is
+  #   either organization id
+  #   or submitter
+
 end
 
 post '/organizations/:organization_id/data_buckets/:data_bucket_id/submissions/:submission_id/validate' do
+  # todo: check if user is
+  #   either organization id
+  #   or submitter
+
   validate_user_is_organization_admin
 end
