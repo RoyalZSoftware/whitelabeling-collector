@@ -1,18 +1,19 @@
 import React from 'react';
-import Form, { useForm } from '../shared/form/form';
+import Form, { Is, useForm } from '../shared/form';
+import { Button } from '@mui/material'
 
 const SignInPage = () => {
     const form = useForm({
-        username: 'required',
-        password: 'required',
-    }, (values) => {
-        alert(JSON.stringify(values))
+        username: Is.required,
+        password: Is.required,
+    }, (values, notify) => {
+        notify(JSON.stringify(values, undefined, 2))
     });
     
     return <Form form={form}>
         <Form.Fields.TextInput name="username" label="Benutzername" hint="Kann auch eine Email sein"/>
         <Form.Fields.TextInput name="password" label="Passwort" />
-        <button onClick={form.handleSubmit}>Submit</button>
+        <Button>Submit</Button>
     </Form>
 }
 
