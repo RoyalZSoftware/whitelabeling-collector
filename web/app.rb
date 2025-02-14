@@ -2,10 +2,30 @@ require_relative '../lib/whitelabeling_collector.rb';
 require 'active_record'
 require 'json'
 require 'sinatra'
+require "sinatra/cross_origin"
 
 ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: 'Test.sqlite3')
 
-before '/*' do
+set :allow_origin, :any
+set :allow_methods, [:get, :post, :options]
+set :allow_credentials, true
+set :max_age, "1728000"
+set :expose_headers, ['Content-Type']
+
+configure do
+  enable :cross_origin
+end
+
+options "*" do
+  response.headers["Allow"] = "HEAD,GET,PUT,POST,DELETE,OPTIONS"
+
+  response.headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept"
+
+  200
+end
+
+
+before '*' do
   content_type :json
 end
 
@@ -32,8 +52,13 @@ def json_body
   JSON.parse request.body.read
 end
 
+get '/organizations' do
+  WhitelabelingCollector::Lib::Organization.all().to_json
+end
+
 # Create a new organization. Should be limited to X
 post '/organizations' do
+  WhitelabelingCollector::Lib::Organization.create(name: json_body['name']).to_json
 end
 
 post '/upload' do

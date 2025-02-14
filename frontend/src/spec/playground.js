@@ -1,6 +1,6 @@
 import React from 'react';
 import Form, { Is, useForm } from '../shared/form';
-import { DataBucketForm, OrganizationForm, OrganizationList, OrganizationSelect, UserProvider, useUserProvider } from '../shared/organization-form';
+import { DataBucketForm, FieldWizzard, OrganizationForm, OrganizationList, OrganizationSelect, UserProvider, useUserProvider } from '../shared/organization-form';
 import { CssBaseline } from '@mui/material'
 import { pub, Snackbar, SUCCESS } from '../shared/snackbar';
 import Card from '../shared/card';
@@ -84,6 +84,10 @@ registerSpec('List', 'The list component', () => {
     return <List >
         {['hallo', 'welt'].map(c => <ListItem><ListItemText>{c}</ListItemText></ListItem>)}
     </List>
+});
+
+registerSpec('FieldWizzard', undefined, () => {
+    return <FieldWizzard/>
 });
 
 export const Playground = () => {
